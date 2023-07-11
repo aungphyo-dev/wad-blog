@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateBlogRequest extends FormRequest
+class StoreCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,8 @@ class UpdateBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            "blog_name"=>"required|min:10|max:125",
-//            "blog_description"=>"required|min:100",
-//            "blog_category" => "required|exists:categories,id"
+            'comment' => 'required|max:1000',
+            'blog_id' => 'required|exists:blogs,id'
         ];
     }
 }

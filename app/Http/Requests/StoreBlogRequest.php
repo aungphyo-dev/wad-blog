@@ -23,7 +23,8 @@ class StoreBlogRequest extends FormRequest
     {
         return [
             "blog_name"=>"required|min:10|max:125",
-            "blog_description"=>"required|min:100"
+            "blog_description"=>"required|min:100",
+            "blog_category" => "required|exists:categories,id"
         ];
     }
 }

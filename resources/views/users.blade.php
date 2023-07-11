@@ -12,6 +12,8 @@
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
+                        <th>Article Count</th>
+                        <th>Category Count</th>
                         <th>Actions</th>
                         <th>Created At</th>
                         <th>Updated At</th>
@@ -24,7 +26,15 @@
                             <td>
                                 {{ $user->name }}
                                 <br>
-                                <p class="small mb-0">{{ Str::limit($user->email,10,"...") }}</p>
+                                <p class="small mb-0">{{ $user->email}}</p>
+                            </td>
+                            <td>
+                                {{$user->blogs->count()}}
+                            </td>
+                            <td class="align-middle">
+                                    @foreach($user->categories->pluck('title') as $title)
+                                        <span class="me-1">{{$title}} |</span>
+                                    @endforeach
                             </td>
                             <td>
                                 <div class="btn-group">

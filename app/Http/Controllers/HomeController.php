@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class HomeController extends Controller
 {
@@ -29,6 +30,7 @@ class HomeController extends Controller
 
     public function users()
     {
+//        Gate::authorize('users-show');
         $users = User::when(request()->has('keyword'),function ($query){
             $keyword = request()->keyword;
             $query->where('title','like','%'.$keyword.'%');

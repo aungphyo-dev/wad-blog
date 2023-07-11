@@ -7,12 +7,26 @@
                 Article List
             </div>
             <div class="">
+                <form action="" method="GET">
+                    <div class="input-group mb-2 position-relative">
+                        <label for="input" class=""></label>
+                        <input id="input" type="text" class="form-control" name="keyword"
+                               value="@if(request()->has('keyword')) {{request()->keyword}} @endif">
+                        @if(request()->has('keyword'))
+                            <a href="{{route('blog.index')}}" class="position-absolute btn" style="right: 85px ;z-index: 5"> X </a>
+                        @endif
+                        <button class="btn btn-secondary">Search</button>
+                    </div>
+                </form>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <th>Id</th>
                         <th>Title</th>
-                        <th>Blogger</th>
+                        @can('admin-only')
+                            <th>Blogger</th>
+                        @endcan
+                        <th>Category</th>
                         <th>Actions</th>
                         <th>Created At</th>
                         <th>Updated At</th>
@@ -25,25 +39,33 @@
                             <td>
                                 {{ $post->title }}
                                 <br>
-                                <p class="small mb-0">{{ Str::limit($post->description,30,"...") }}</p>
+                                <p class="small mb-0">{{ $post->excerpt }}</p>
                             </td>
-                            <td>{{$post->user_id}}</td>
+                            @can('admin-only')
+                                <td>{{$post->user->name}}</td>
+                            @endcan
+{{--                            <td>{{$post->category?->title}}</td>--}}
+                            <td>{{$post->category->title ?? "Unknown"}}</td>
                             <td>
                                 <div class="btn-group">
                                     <a href="{{ route('blog.show',$post->id) }}"
                                        class="btn w-100 mb-2">
                                         <i class="bi bi-info"></i>
                                     </a>
-                                    <a href="{{ route('blog.edit',$post->id) }}" class="btn  w-100 mb-2">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('blog.destroy',$post->id )}}" method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button class="btn">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    @can('update',$post)
+                                        <a href="{{ route('blog.edit',$post->id) }}" class="btn  w-100 mb-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    @endcan
+                                    @can('delete',$post)
+                                        <form action="{{ route('blog.destroy',$post->id )}}" method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
                                 </div>
                             </td>
                             <td>
@@ -67,7 +89,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="6">
                             {{$blogs->onEachSide(1)->links()}}
                         </td>
                     </tr>

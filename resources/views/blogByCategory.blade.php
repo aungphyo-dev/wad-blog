@@ -1,12 +1,13 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="container">
         <div class="row">
-            <div>
-                @if(request()->has('keyword'))
-                    <p>Searching result for {{request()->keyword}}</p>
-                @endif
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="">
+                    Search result by "{{$category->title}} @if(request()->has('keyword')) {{'and '. request()->keyword   }}@endif "
+                </div>
+                <div>
+                </div>
             </div>
             <div class="col-7 mx-auto">
                 @forelse ( $blogs as $blog )
